@@ -40,7 +40,7 @@ namespace MachEnquetes.Repositories
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex.Message});
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -54,7 +54,7 @@ namespace MachEnquetes.Repositories
 
                 return StatusCode(200, user.First());
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex.Message });
             }
@@ -84,9 +84,9 @@ namespace MachEnquetes.Repositories
                 if (foundUser.StatusCode == 404)
                 {
                     _users.InsertOne(user);
-                    return StatusCode(200, user);
+                    return StatusCode(201, user);
                 }
-                    
+
                 return StatusCode(406, new { Message = "Already exists " });
             }
             catch (Exception ex)
@@ -95,43 +95,74 @@ namespace MachEnquetes.Repositories
             }
         }
 
-        public User Update(User updatedUser, string id)
+        public ObjectResult Update(string id, User updatedUser)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.Id.ToString(), id);
-            var user = _users.Find(filter).First();
+            try
+            {
+                var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+                var foundUser = _users.Find(filter);
 
-            if (user == null)
-                return null;
+                if (foundUser == null || foundUser.CountDocuments() == 0)
+                    return StatusCode(404, null);
 
-            user.FullName = updatedUser.FullName;
-            user.Password = updatedUser.Password;
-            user.LastModifiedDate = updatedUser.LastModifiedDate;
-            _users.ReplaceOneAsync(filter, user);
+                var user = foundUser.First();
+                user.FullName = updatedUser.FullName;
+                user.Password = updatedUser.Password;
+                user.LastModifiedDate = updatedUser.LastModifiedDate;
+                _users.ReplaceOneAsync(filter, user);
 
-            return user;
-
+                return StatusCode(200, user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
-        public void DeleteById(string id)
+        public ObjectResult DeleteById(string id)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.Id.ToString(), id);
+            try
+            {
+                var foundUser = GetById(id);
+                if (foundUser.StatusCode == 200)
+                {
+                    var filter = Builders<User>.Filter.Eq(x => x.Id, id);
 
-            _users.DeleteOneAsync(filter);
+                    _users.DeleteOneAsync(filter);
+
+                    return StatusCode(200, null);
+                }
+
+                return foundUser;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
-        public void DeleteAll()
+        public ObjectResult DeleteAll()
         {
-            _users.DeleteManyAsync(new BsonDocument { });
+            try
+            {
+                _users.DeleteManyAsync(new BsonDocument { });
+                return StatusCode(204, null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
-        public User Login(User user)
+        public ObjectResult Login(User user)
         {
             var filter = Builders<User>.Filter.Where(x => x.Email.Equals(user.Email) && x.Password.Equals(user.Password));
             IFindFluent<User, User> foundUser = _users.Find(filter);
 
-            if (foundUser == null || foundUser.CountDocuments() == 0) return null;
+            if (foundUser == null || foundUser.CountDocuments() == 0)
+                return StatusCode(404, user);
 
-            return foundUser.First();
+            return StatusCode(200, user);
         }
     }
 }

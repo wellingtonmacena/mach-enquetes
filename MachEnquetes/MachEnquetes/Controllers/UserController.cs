@@ -38,7 +38,7 @@ namespace Octo_Umbrella_API.Controllers
         [Route("[controller]")]
         [SwaggerOperation(Summary = "Creates one user object", Description = "Returns a user object.")]
         public IActionResult CreateOne([FromBody] User user)
-        {            
+        {
             try
             {
                 var createdUser = UserRepository.Create(user);
@@ -57,41 +57,19 @@ namespace Octo_Umbrella_API.Controllers
         [SwaggerOperation(Summary = "Signs in one user.", Description = "Returns a list with all notes of user saved")]
         public IActionResult Login([FromBody] User user)
         {
-            try
-            {
-                User foundUser = UserRepository.Login(user);
-                if (foundUser == null)
-                    return NotFound();
+            var foundUser = UserRepository.Create(user);
 
-                //List<Note> notes = NoteRepository.GetAllFromUserByUserEmail(foundUser.Email);
-                //foundUser.SetNotes(notes);
-                return Ok(foundUser);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
+            return foundUser;
         }
 
         [HttpPut]
         [Route("[controller]/{id}")]
         [SwaggerOperation(Summary = "Updates one user filtered by id.", Description = "Returns user object updated.")]
-        public async Task<IActionResult> UpdateOne([FromBody] User User, string id)
+        public IActionResult UpdateOne([FromBody] User user, string id)
         {
-            try
-            {
-                User updatedUser = UserRepository.Update(User, id);
+            var updatedUser = UserRepository.Update(id, user);
 
-                if (updatedUser == null)
-                    return NotFound();
-
-                return StatusCode(200, updatedUser);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, ex);
-            }
+            return updatedUser;
         }
 
         [HttpDelete]
@@ -99,16 +77,9 @@ namespace Octo_Umbrella_API.Controllers
         [SwaggerOperation(Summary = "Deletes all users saved.", Description = "Returns nothing")]
         public IActionResult DeleteAll()
         {
-            try
-            {
-                UserRepository.DeleteAll();
-                return StatusCode(204);
-            }
-            catch (Exception ex)
-            {
+            var updatedUser = UserRepository.DeleteAll();
 
-                return StatusCode(500, ex);
-            }
+            return updatedUser;
         }
 
         [HttpDelete]
@@ -116,16 +87,9 @@ namespace Octo_Umbrella_API.Controllers
         [SwaggerOperation(Summary = "Deletes one user filtered by id .", Description = "Returns nothing")]
         public IActionResult DeleteOne(string id)
         {
-            try
-            {
-                UserRepository.DeleteById(id);
-                return StatusCode(200);
-            }
-            catch (Exception ex)
-            {
+            var updatedUser = UserRepository.DeleteById(id);
 
-                return StatusCode(500, ex);
-            }
+            return updatedUser;
         }
     }
 }
