@@ -20,53 +20,101 @@ namespace MachEnquetes.Repositories
                 .GetCollection<User>(options.Value.UserCollectionName);
         }
 
-        public List<User> GetAll()
+        public UserRepository(string connectionString, string databaseName, string userCollectionName)
         {
-            return _users.Find(_ => true).ToList();
+            var mongoClient = new MongoClient(connectionString);
+            _users = mongoClient
+                .GetDatabase(databaseName)
+                .GetCollection<User>(userCollectionName);
         }
 
-        public User GetById(string id)
-        {
-            var user = _users.Find(s => s.Id == id);
-            if (user == null || user.CountDocuments() == 0) return null;
-
-            return user.First();
-        }
-
-
-        public void Create(User user)
+        public ObjectResult GetAll()
         {
             try
             {
-                _users.InsertOne(user);
+                var objects = _users.Find(_ => true).ToList();
+                if (objects.Count == 0)
+                    return StatusCode(204, objects);
+
+                return StatusCode(200, objects);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                return StatusCode(500, new { ex.Message});
             }
         }
 
-        public User Update(User updateduser, string id)
+        public ObjectResult GetById(string id)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+            try
+            {
+                var user = _users.Find(s => s.Id == id);
+                if (user == null || user.CountDocuments() == 0)
+                    return StatusCode(404, user);
+
+                return StatusCode(200, user.First());
+            }
+            catch (Exception ex )
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public ObjectResult GetByEmail(string email)
+        {
+            try
+            {
+                var user = _users.Find(s => s.Email == email);
+                if (user == null || user.CountDocuments() == 0)
+                    return StatusCode(404, user);
+
+                return StatusCode(200, user.First());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public ObjectResult Create(User user)
+        {
+            try
+            {
+                var foundUser = GetByEmail(user.Email);
+                if (foundUser.StatusCode == 404)
+                {
+                    _users.InsertOne(user);
+                    return StatusCode(200, user);
+                }
+                    
+                return StatusCode(406, new { Message = "Already exists " });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public User Update(User updatedUser, string id)
+        {
+            var filter = Builders<User>.Filter.Eq(x => x.Id.ToString(), id);
             var user = _users.Find(filter).First();
 
             if (user == null)
                 return null;
 
-            user.Name = updateduser.Name;
-            user.Password = updateduser.Password;
-            user.LastModifiedDate = updateduser.LastModifiedDate;
+            user.FullName = updatedUser.FullName;
+            user.Password = updatedUser.Password;
+            user.LastModifiedDate = updatedUser.LastModifiedDate;
             _users.ReplaceOneAsync(filter, user);
 
             return user;
-
 
         }
 
         public void DeleteById(string id)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+            var filter = Builders<User>.Filter.Eq(x => x.Id.ToString(), id);
 
             _users.DeleteOneAsync(filter);
         }

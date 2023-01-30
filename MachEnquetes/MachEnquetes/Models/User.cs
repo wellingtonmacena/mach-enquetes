@@ -1,60 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MachEnquetes.Application;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MachEnquetes.Models
 {
+    /// <summary>
+    /// A user.
+    /// </summary>
     public class User
-    {
+    {       
+        [SwaggerExclude]
         public string Id
         {
-            get => default;
-            set
-            {
-            }
+            get;
+            set;
         }
 
-        public string Name
+        /// <example>Wellington Macena</example>
+        public string FullName
         {
-            get => default;
+            get;
             set
-            {
-            }
+            ;
         }
 
+        /// <example>wellington.macena.23@gmail.com</example>
         public string Email
         {
-            get => default;
-            set
-            {
-            }
+            get;
+            set;
         }
 
+        /// <example>teste</example>
         public string Password
         {
-            get => default;
-            set
-            {
-            }
+            get;
+            set;
         }
 
-        public DateTime DateBirth
+        /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
+        public DateTime? DateBirth
         {
-            get => default;
-            set
-            {
-            }
+            get;
+            set;
+        }
+        /// <example>NULL</example>
+        [SwaggerExclude]
+        public List<Survey>? Surveys
+        {
+            get;
+            set;
         }
 
-        public List<Survey> Surveys
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
 
         public DateTime? LastModifiedDate { get; set; }
+        /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
+        public DateTime? CreatedModifiedDate { get; set; }
+
+        public User(string fullName, string email, string password) : this()
+        {
+            FullName = fullName;
+            Email = email;
+            Password = password;
+        }
+
+        public User()
+        {
+            Id = Guid.NewGuid().ToString();
+            CreatedModifiedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedModifiedDate;
+        }
+
+        public User(string id) : this()
+        {
+            Id = id;
+        }
     }
 }

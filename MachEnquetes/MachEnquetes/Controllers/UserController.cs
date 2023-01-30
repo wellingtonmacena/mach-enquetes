@@ -21,7 +21,8 @@ namespace Octo_Umbrella_API.Controllers
         [SwaggerOperation(Summary = "Gets all users saved.", Description = "Returns a list with all users saved.")]
         public IActionResult GetAll()
         {
-            return Ok(UserRepository.GetAll());
+            var users = UserRepository.GetAll();
+            return users;
         }
 
         [Route("[controller]/{id}")]
@@ -29,22 +30,20 @@ namespace Octo_Umbrella_API.Controllers
         [SwaggerOperation(Summary = "Gets one user filtered by id.", Description = "Returns a user object.")]
         public IActionResult GetById(string id)
         {
-            User User = UserRepository.GetById(id);
-            if (User == null)
-                return NotFound();
-
-            return Ok(User);
+            var user = UserRepository.GetById(id);
+            return user;
         }
 
         [HttpPost]
         [Route("[controller]")]
         [SwaggerOperation(Summary = "Creates one user object", Description = "Returns a user object.")]
-        public IActionResult InsertOne([FromBody] User User)
-        {
+        public IActionResult CreateOne([FromBody] User user)
+        {            
             try
             {
-                UserRepository.Create(User);
-                return StatusCode(201, User);
+                var createdUser = UserRepository.Create(user);
+
+                return createdUser;
             }
             catch (Exception ex)
             {

@@ -1,5 +1,7 @@
+using MachEnquetes.Application;
 using MachEnquetes.Utils;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Diagnostics;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
-builder.Services.AddSwaggerGen(c => { c.EnableAnnotations(); AddSwaggerDocumentation(c); });
+builder.Services.AddSwaggerGen(c => { c.EnableAnnotations(); AddSwaggerDocumentation(c); c.SchemaFilter<SwaggerExcludeFilter>(); });
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -23,7 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+Debug.WriteLine(DateTime.Now);
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
