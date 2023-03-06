@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">MachEnquetes</string>
+    <string name="title_activity_initial">InitialActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    ##Signup Layout
+    <string name="full_name_signup">Nome Completo</string>
+    <string name="signup_signup">CADASTRO</string>
+    <string name="birth_date_signup">Data de Nascimento</string>
+    <string name="cpf_signup">CPF</string>
+    <string name="email_signup">Email</string>
+    <string name="password_signup">Senha</string>
+    <string name="confirmation_password_signup">Confirmar Senha</string>
+    <string name="phone_signup">Telefone</string>
+
+    ##Login Layout
+    <string name="email_login">Email</string>
+    <string name="do_login_text">FAÇA LOGIN</string>
+    <string name="password_login">Senha</string>
+    <string name="forget_password_login">Esqueceu sua senha?</string>
+
+
+
+
+
+    <string name="msg_confirmacaoEmail">Foi enviado um código de verificação para:  </string>
+    <string name="msg_insrecaoEmail">Insira o código recebido abaixo  </string>
+    <string name="home">Home</string>
+    <string name="edit_perf">Editar perfil</string>
+    <string name="conf">Configurações</string>
+    <string name="cancel">Cancelar</string>
+    <string name="fire">Tem certeza?</string>
+    <string name="valor">Somar</string>
+    <string name="title_activity_component_modal" translatable="false">component_modal</string>
+
+    <string name="tern_cond">Termos e Condições</string>
+    <string name="impot_tern">IMPORTANTE:</string>
+    <string name="leia_tern">Leia e aceite os Termos e Condições para prosseguir</string>
+    <string name="aceitacao_tern">Aceito os termos e condições</string>
 </resources>

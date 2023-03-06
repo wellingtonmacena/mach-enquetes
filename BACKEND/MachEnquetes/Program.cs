@@ -1,5 +1,8 @@
 using MachEnquetes.Application;
+using MachEnquetes.Entities;
 using MachEnquetes.Utils;
+using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics;
 using System.Reflection;
@@ -12,8 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-
-builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
+builder.Services.AddEntityFrameworkMySQL()
+    .AddDbContext<MachEnquetesContext>(options =>
+    {
+        options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+        
+//builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
 builder.Services.AddSwaggerGen(c => { c.EnableAnnotations(); AddSwaggerDocumentation(c); c.SchemaFilter<SwaggerExcludeFilter>(); });
 
 var app = builder.Build();

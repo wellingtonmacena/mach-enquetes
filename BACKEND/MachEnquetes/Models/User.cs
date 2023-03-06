@@ -1,5 +1,6 @@
 ﻿using MachEnquetes.Application;
-using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace MachEnquetes.Models
 {
@@ -7,9 +8,10 @@ namespace MachEnquetes.Models
     /// A user.
     /// </summary>
     public class User
-    {       
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerExclude]
-        public string Id
+        public int Id
         {
             get;
             set;
@@ -43,13 +45,6 @@ namespace MachEnquetes.Models
             get;
             set;
         }
-        /// <example>NULL</example>
-        [SwaggerExclude]
-        public List<Survey>? Surveys
-        {
-            get;
-            set;
-        }
 
         /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
         public DateTime? LastModifiedDate { get; set; }
@@ -61,18 +56,21 @@ namespace MachEnquetes.Models
             FullName = fullName;
             Email = email;
             Password = password;
+            DateBirth = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
+            CreatedDate = DateTime.UtcNow;
         }
 
         public User()
         {
-            Id = Guid.NewGuid().ToString();
+         //   Id = Guid.NewGuid().ToString();
             CreatedDate = DateTime.UtcNow;
             LastModifiedDate = CreatedDate;
         }
 
         public User(string id) : this()
         {
-            Id = id;
+           // Id = id;
         }
     }
 }
