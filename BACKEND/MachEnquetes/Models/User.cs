@@ -53,15 +53,11 @@ namespace MachEnquetes.Models
         public DateTime? LastModifiedDate { get; set; }
         /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
         public DateTime? CreatedDate { get; set; }
-      
-        public User(string fullName, string email, string password, string birthDate) : this()
+
+        public User()
         {
-            FullName = fullName;
-            Email = email;
-            Password = password;
-            DateBirth = DateTime.ParseExact(birthDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;            
+            LastModifiedDate = CreatedDate;
         }
 
         public User(string fullName, string email, string password) : this()
@@ -70,17 +66,15 @@ namespace MachEnquetes.Models
             Email = email;
             Password = password;
             DateBirth = DateTime.UtcNow;
-            CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;
         }
 
-        public User()
+        public User(string fullName, string email, string password, string birthDate) : this()
         {
-         //   Id = Guid.NewGuid().ToString();
-            CreatedDate = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;
-        }
-
+            FullName = fullName;
+            Email = email;
+            Password = password;
+            DateBirth = DateTime.ParseExact(birthDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);           
+        }    
 
         public override string? ToString()
         {
