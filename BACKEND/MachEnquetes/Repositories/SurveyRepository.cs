@@ -1,165 +1,158 @@
-﻿using MachEnquetes.Utils;
+﻿using MachEnquetes.Entities;
+using MachEnquetes.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace MachEnquetes.Repositories
 {
     public class SurveyRepository : Controller
     {
-        //    private readonly IMongoCollection<User> _surveys;
+        private MachEnquetesContext MachEnquetesContext;
 
-        //    public SurveyRepository(IOptions<DatabaseSettings> options)
-        //    {
-        //        var mongoClient = new MongoClient(options.Value.ConnectionString);
-
-        //        _surveys = mongoClient
-        //            .GetDatabase(options.Value.DatabaseName)
-        //            .GetCollection<User>(options.Value.SurveyCollectionName);
-        //    }
-
-        //    public SurveyRepository(string connectionString, string databaseName, string collectionName)
-        //    {
-        //        var mongoClient = new MongoClient(connectionString);
-        //        _surveys = mongoClient
-        //            .GetDatabase(databaseName)
-        //            .GetCollection<User>(collectionName);
-        //    }
-
-        //    public ObjectResult GetAll()
-        //    {
-        //        try
-        //        {
-        //            var objects = _surveys.Find(_ => true).ToList();
-        //            if (objects.Count == 0)
-        //                return StatusCode(204, objects);
-
-        //            return StatusCode(200, objects);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult GetById(string id)
-        //    {
-        //        try
-        //        {
-        //            var user = _surveys.Find(s => s.Id == id);
-        //            if (user == null || user.CountDocuments() == 0)
-        //                return StatusCode(404, user);
-
-        //            return StatusCode(200, user.First());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult GetByEmail(string email)
-        //    {
-        //        try
-        //        {
-        //            var user = _surveys.Find(s => s.Email == email);
-        //            if (user == null || user.CountDocuments() == 0)
-        //                return StatusCode(404, user);
-
-        //            return StatusCode(200, user.First());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult Create(User user)
-        //    {
-        //        try
-        //        {
-        //            var foundUser = GetByEmail(user.Email);
-        //            if (foundUser.StatusCode == 404)
-        //            {
-        //                _surveys.InsertOne(user);
-        //                return StatusCode(201, user);
-        //            }
-
-        //            return StatusCode(406, new { Message = "Already exists " });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult Update(string id, User updatedUser)
-        //    {
-        //        try
-        //        {
-        //            var filter = Builders<User>.Filter.Eq(x => x.Id, id);
-        //            var foundUser = _surveys.Find(filter);
-
-        //            if (foundUser == null || foundUser.CountDocuments() == 0)
-        //                return StatusCode(404, null);
-
-        //            var user = foundUser.First();
-        //            user.FullName = updatedUser.FullName;
-        //            user.Password = updatedUser.Password;
-        //            user.LastModifiedDate = updatedUser.LastModifiedDate;
-        //            _surveys.ReplaceOneAsync(filter, user);
-
-        //            return StatusCode(200, user);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult DeleteById(string id)
-        //    {
-        //        try
-        //        {
-        //            var foundUser = GetById(id);
-        //            if (foundUser.StatusCode == 200)
-        //            {
-        //                var filter = Builders<User>.Filter.Eq(x => x.Id, id);
-
-        //                _surveys.DeleteOneAsync(filter);
-
-        //                return StatusCode(200, null);
-        //            }
-
-        //            return foundUser;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    public ObjectResult DeleteAll()
-        //    {
-        //        try
-        //        {
-        //            _surveys.DeleteManyAsync(new BsonDocument { });
-        //            return StatusCode(204, null);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return StatusCode(500, new { ex.Message });
-        //        }
-        //    }
-
-        //    internal object GetAllById(User user)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        private IOptions<DatabaseSettings> options;
-
-        public SurveyRepository(IOptions<DatabaseSettings> options)
+        public SurveyRepository(MachEnquetesContext machEnquetesContext)
         {
-            this.options = options;
+            this.MachEnquetesContext = machEnquetesContext;
         }
+
+        public async Task<ObjectResult> GetAll()
+        {
+            try
+            {
+                var surveys = await MachEnquetesContext.Surveys.ToListAsync();
+                if (surveys.Count == 0)
+                    return StatusCode(204, surveys);
+
+                return StatusCode(200, surveys);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> GetAllSurveysFromUserId(int id)
+        {
+            try
+            {
+                var surveys =  await MachEnquetesContext.Surveys.Where(item => item.FKCreatorUser == id).ToListAsync();
+                if (surveys.Count == 0)
+                    return StatusCode(204, surveys);
+
+                return StatusCode(200, surveys);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> GetById(int id)
+        {
+            try
+            {
+                var surveys = await MachEnquetesContext.Surveys.Where(s => s.Id == id).ToListAsync();
+                if (surveys == null || surveys.Count == 0)
+                    return StatusCode(404, surveys);
+
+                return StatusCode(200, surveys.First());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> Create(Survey survey)
+        {
+            try
+            {
+                var foundSurvey = await GetById(survey.Id);
+                if (foundSurvey.StatusCode == 404)
+                {
+                    MachEnquetesContext.Surveys.AddAsync(survey);
+                    await MachEnquetesContext.SaveChangesAsync();
+                    return StatusCode(201, survey);
+                }
+
+                return StatusCode(406, new { Message = "Already exists " });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> Update(int id, Survey updatedSurvey)
+        {
+            try
+            {
+                var foundSurvey = MachEnquetesContext.Surveys.Where(s => s.Id == id);
+
+                if (foundSurvey == null || foundSurvey.Count() == 0)
+                    return StatusCode(404, null);
+
+                var survey = foundSurvey.First();
+
+                survey.Title = updatedSurvey.Title;
+                survey.CanUserUpdateVote = updatedSurvey.CanUserUpdateVote;
+                survey.CanUnregistredVote = updatedSurvey.CanUnregistredVote;
+                survey.FinishDate = updatedSurvey.FinishDate;
+                survey.OptionsSelectedCount = updatedSurvey.OptionsSelectedCount;
+                survey.VotesCount = updatedSurvey.VotesCount;
+                survey.LastModifiedDate = DateTime.UtcNow;
+
+                MachEnquetesContext.Surveys.Update(survey);
+                await MachEnquetesContext.SaveChangesAsync();
+
+                return StatusCode(200, survey);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> DeleteById(int id)
+        {
+            try
+            {
+                var foundSurvey = await GetById(id);
+                if (foundSurvey.StatusCode == 200)
+                {
+                    _ = MachEnquetesContext.Surveys.Remove((Survey)foundSurvey.Value);
+                    await MachEnquetesContext.SaveChangesAsync();
+
+                    return StatusCode(200, null);
+                }
+
+                return StatusCode(404, new { Message = "User not found" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<ObjectResult> DeleteAll()
+        {
+            try
+            {
+                var surveys = MachEnquetesContext.Surveys;
+                foreach (var item in surveys)
+                {
+                    MachEnquetesContext.Surveys.Remove(item);
+                };
+
+                await MachEnquetesContext.SaveChangesAsync();
+
+                return StatusCode(204, null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+
     }
 }

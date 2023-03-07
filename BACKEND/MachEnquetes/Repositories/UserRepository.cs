@@ -12,12 +12,7 @@ namespace MachEnquetes.Repositories
         public UserRepository(MachEnquetesContext machEnquetesContext)
         {
             this.MachEnquetesContext = machEnquetesContext;
-            //Users.AddAsync(new Models.User("we", "we", "we", "28/04/1998 00:00:00"));
-            //machEnquetesContext.SaveChangesAsync();
-            //var f = machEnquetesContext.Users.ToList();
-            Console.WriteLine();
         }
-
 
         public async Task<ObjectResult> GetAll()
         {
@@ -39,11 +34,11 @@ namespace MachEnquetes.Repositories
         {
             try
             {
-                var users = MachEnquetesContext.Users.Where(s => s.Id == id).ToListAsync();
-                if (users == null || users.Result.Count == 0)
+                var users = await MachEnquetesContext.Users.Where(s => s.Id == id).ToListAsync();
+                if (users == null || users.Count == 0)
                     return StatusCode(404, users);
 
-                return StatusCode(200, users.Result.First());
+                return StatusCode(200, users.First());
             }
             catch (Exception ex)
             {
@@ -71,8 +66,8 @@ namespace MachEnquetes.Repositories
         {
             try
             {
-                var foundUser = GetByEmail(user.Email);
-                if (foundUser.Result.StatusCode == 404)
+                var foundUser = await GetByEmail(user.Email);
+                if (foundUser.StatusCode == 404)
                 {
                     MachEnquetesContext.Users.AddAsync(user);
                     await MachEnquetesContext.SaveChangesAsync();
@@ -116,10 +111,10 @@ namespace MachEnquetes.Repositories
         {
             try
             {
-                var foundUser = GetById(id);
-                if (foundUser.Result.StatusCode == 200)
+                var foundUser = await GetById(id);
+                if (foundUser.StatusCode == 200)
                 {
-                    _ = MachEnquetesContext.Users.Remove((User)foundUser.Result.Value);
+                    _ = MachEnquetesContext.Users.Remove((User)foundUser.Value);
                     await MachEnquetesContext.SaveChangesAsync();
 
                     return StatusCode(200, null);

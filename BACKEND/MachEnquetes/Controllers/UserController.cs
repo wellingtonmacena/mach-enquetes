@@ -92,6 +92,5 @@ namespace MachEnquetes.Controllers
             return updatedUser;
         }
         #endregion
-
     }
 }

@@ -5,7 +5,7 @@ using MachEnquetes.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace MachEnquetes.IntegrationTests
+namespace MachEnquetes.IntegrationTests.Repositories
 {
     public partial class UserRepositoryTests
     {
@@ -20,7 +20,7 @@ namespace MachEnquetes.IntegrationTests
                         .Build();
 
             var connectionString = config.GetValue<string>($"ConnectionStrings:{nameof(DatabaseSettings.DefaultConnectionTests)}");
-            DbContextOptions<MachEnquetesContext>  dbContextOptions = new DbContextOptionsBuilder<MachEnquetesContext>()
+            DbContextOptions<MachEnquetesContext> dbContextOptions = new DbContextOptionsBuilder<MachEnquetesContext>()
                 .UseMySQL(connectionString)
                 .Options;
 
@@ -58,7 +58,7 @@ namespace MachEnquetes.IntegrationTests
 
         [Test]
         [TestCase("Wellington", "well2@gmail.com", "tstes")]
-        public void InsertOne_WhenAlreadyExists_False(string name, string email, string password)
+        public void CreateOne_WhenAlreadyExists_False(string name, string email, string password)
         {
             var user = new User(name, email, password);
 
@@ -69,7 +69,7 @@ namespace MachEnquetes.IntegrationTests
 
         [Test]
         [TestCase("Wellington", "well@gmail.com", "tstes")]
-        public void InsertOne_WhenAlreadyExists_True(string name, string email, string password)
+        public void CreateOne_WhenAlreadyExists_True(string name, string email, string password)
         {
             var user = new User(name, email, password);
 
@@ -116,7 +116,7 @@ namespace MachEnquetes.IntegrationTests
         public void UpdateOne_WhenAlreadyExists_False(int id, string name, string email, string password)
         {
             var user = new User(name, email, password);
-             UserRepository.DeleteById(id);
+            UserRepository.DeleteById(id);
             var result = UserRepository.Update(id, user);
 
             Assert.IsTrue(result.Result.StatusCode == 404);
