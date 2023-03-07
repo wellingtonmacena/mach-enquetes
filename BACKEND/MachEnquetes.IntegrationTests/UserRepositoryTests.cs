@@ -1,154 +1,158 @@
-//using MachEnquetes.Models;
-//using MachEnquetes.Repositories;
-//using MachEnquetes.Utils;
-//using Microsoft.Extensions.Configuration;
+using MachEnquetes.Entities;
+using MachEnquetes.Models;
+using MachEnquetes.Repositories;
+using MachEnquetes.Utils;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-//namespace MachEnquetes.IntegrationTests
-//{
-//    public class UserRepositoryTests
-//    {
-//        public UserRepository UserRepository { get; set; }
-//        [SetUp]
-//        public void Setup()
-//        {
-//            var config = new ConfigurationBuilder()
-//        .SetBasePath(AppContext.BaseDirectory)
-//        .AddJsonFile("appsettings.json", false, true)
-//        .Build();
+namespace MachEnquetes.IntegrationTests
+{
+    public partial class UserRepositoryTests
+    {
+        public UserRepository UserRepository { get; set; }
 
-//            var connectionString = config.GetValue<string>($"DatabaseSettings:{nameof(DatabaseSettings.ConnectionString)}");
-//            var databaseNameHomol = config.GetValue<string>($"DatabaseSettings:{nameof(DatabaseSettings.DatabaseNameHomol)}");
-//            var userCollectionName = config.GetValue<string>($"DatabaseSettings:{nameof(DatabaseSettings.UserCollectionName)}");
+        [SetUp]
+        public void Setup()
+        {
+            var config = new ConfigurationBuilder()
+                        .SetBasePath(AppContext.BaseDirectory)
+                        .AddJsonFile("appsettings.json", false, true)
+                        .Build();
 
-//            UserRepository = new UserRepository(connectionString, databaseNameHomol, userCollectionName);
-//            UserRepository.Create(new User("test") { Email = "well@gmail.com", Password = "tstes" });
-//        }
+            var connectionString = config.GetValue<string>($"ConnectionStrings:{nameof(DatabaseSettings.DefaultConnectionTests)}");
+            DbContextOptions<MachEnquetesContext>  dbContextOptions = new DbContextOptionsBuilder<MachEnquetesContext>()
+                .UseMySQL(connectionString)
+                .Options;
 
-//        [Test]
-//        public void GetAll_ShouldNotBeEmpty_True()
-//        {
-//            var result = UserRepository.GetAll();
+            UserRepository = new UserRepository(new MachEnquetesContext(dbContextOptions));
+            User user = new User("test", "well@gmail.com", "tstes", "28/04/1998 00:00:00");
+            user.Id = 1;
+            UserRepository.Create(user);
+        }
 
-//            Assert.IsTrue(result.StatusCode == 200 || result.StatusCode == 204);
-//        }
+        [Test]
+        public void GetAll_ShouldNotBeEmpty_True()
+        {
+            var result = UserRepository.GetAll().Result;
 
-//        [Test]
-//        [TestCase("test")]
-//        public void GetById_WhenExists_True(string id)
-//        {
-//            var result = UserRepository.GetById(id);
+            Assert.IsTrue(result.StatusCode == 200 || result.StatusCode == 204);
+        }
 
-//            Assert.IsTrue(result.StatusCode == 200);
-//        }
+        [Test]
+        [TestCase("1")]
+        public void GetById_WhenExists_True(int id)
+        {
+            var result = UserRepository.GetById(id).Result;
 
-//        [Test]
-//        [TestCase("nonExistent")]
-//        public void GetById_WhenExists_False(string id)
-//        {
-//            var result = UserRepository.GetById(id);
+            Assert.IsTrue(result.StatusCode == 200);
+        }
 
-//            Assert.IsTrue(result.StatusCode == 404);
-//        }
+        [Test]
+        [TestCase("404")]
+        public void GetById_WhenExists_False(int id)
+        {
+            var result = UserRepository.GetById(id).Result;
+
+            Assert.IsTrue(result.StatusCode == 404);
+        }
+
+        [Test]
+        [TestCase("Wellington", "well2@gmail.com", "tstes")]
+        public void InsertOne_WhenAlreadyExists_False(string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+
+            var result = UserRepository.Create(user);
+
+            Assert.IsTrue(result.Result.StatusCode == 201);
+        }
+
+        [Test]
+        [TestCase("Wellington", "well@gmail.com", "tstes")]
+        public void InsertOne_WhenAlreadyExists_True(string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+
+            var result = UserRepository.Create(user);
+
+            Assert.IsTrue(result.Result.StatusCode == 406);
+        }
+
+        [Test]
+        [TestCase("Wellington", "well@gmail.com", "tstes")]
+        public void Login_WhenAlreadyExists_True(string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+
+            var result = UserRepository.Login(user);
+
+            Assert.IsTrue(result.Result.StatusCode == 200);
+        }
+
+        [Test]
+        [TestCase("Wellington", "well@gmail.com", "<password-word>")]
+        public void Login_WhenAlreadyExists_False(string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+
+            var result = UserRepository.Login(user);
+
+            Assert.IsTrue(result.Result.StatusCode == 404);
+        }
+
+        [Test]
+        [TestCase(1, "Wellington", "well@gmail.com", "tstes")]
+        public void UpdateOne_WhenAlreadyExists_True(int id, string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+
+            var result = UserRepository.Update(id, user);
+
+            Assert.IsTrue(result.Result.StatusCode == 200);
+        }
+
+        [Test]
+        [TestCase(1, "Wellington", "well@gmail.com", "tstes")]
+        public void UpdateOne_WhenAlreadyExists_False(int id, string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+             UserRepository.DeleteById(id);
+            var result = UserRepository.Update(id, user);
+
+            Assert.IsTrue(result.Result.StatusCode == 404);
+        }
+
+        [Test]
+        public void DeleteAll_WhenIsSuccessful_True()
+        {
+            var result = UserRepository.DeleteAll();
+
+            Assert.IsTrue(result.Result.StatusCode == 204);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public void DeleteById_WhenExists_True(int id)
+        {
+            var result = UserRepository.DeleteById(id);
+
+            Assert.IsTrue(result.Result.StatusCode == 200);
+        }
+
+        [Test]
+        [TestCase(404)]
+        public void DeleteById_WhenExists_False(int id)
+        {
+            var result = UserRepository.DeleteById(id);
+
+            Assert.IsTrue(result.Result.StatusCode == 404);
+        }
 
 
-//        [Test]
-//        [TestCase("Wellington", "well2@gmail.com", "tstes")]
-//        public void InsertOne_WhenAlreadyExists_False(string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Create(user);
-
-//            Assert.IsTrue(result.StatusCode == 201);
-//        }
-
-//        [Test]
-//        [TestCase("Wellington", "well@gmail.com", "tstes")]
-//        public void InsertOne_WhenAlreadyExists_True(string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Create(user);
-
-//            Assert.IsTrue(result.StatusCode == 406);
-//        }
-
-//        [Test]
-//        [TestCase("Wellington", "well@gmail.com", "tstes")]
-//        public void Login_WhenAlreadyExists_True(string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Login(user);
-
-//            Assert.IsTrue(result.StatusCode == 200);
-//        }
-
-//        [Test]
-//        [TestCase("Wellington", "well@gmail.com", "<password-word>")]
-//        public void Login_WhenAlreadyExists_False(string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Login(user);
-
-//            Assert.IsTrue(result.StatusCode == 404);
-//        }
-
-//        [Test]
-//        [TestCase("test", "Wellington", "well@gmail.com", "tstes")]
-//        public void UpdateOne_WhenAlreadyExists_True(string id, string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Update(id, user);
-
-//            Assert.IsTrue(result.StatusCode == 200);
-//        }
-
-//        [Test]
-//        [TestCase("test1", "Wellington", "well@gmail.com", "tstes")]
-//        public void UpdateOne_WhenAlreadyExists_False(string id, string name, string email, string password)
-//        {
-//            var user = new User(name, email, password);
-
-//            var result = UserRepository.Update(id, user);
-
-//            Assert.IsTrue(result.StatusCode == 404);
-//        }
-
-//        [Test]
-//        public void DeleteAll_WhenIsSuccessful_True()
-//        {
-//            var result = UserRepository.DeleteAll();
-
-//            Assert.IsTrue(result.StatusCode == 204);
-//        }
-
-//        [Test]
-//        [TestCase("test")]
-//        public void DeleteById_WhenExists_True(string id)
-//        {
-//            var result = UserRepository.DeleteById(id);
-
-//            Assert.IsTrue(result.StatusCode == 200);
-//        }
-
-//        [Test]
-//        [TestCase("test1")]
-//        public void DeleteById_WhenExists_False(string id)
-//        {
-//            var result = UserRepository.DeleteById(id);
-
-//            Assert.IsTrue(result.StatusCode == 404);
-//        }
-
-
-//        [Test]
-//        [OneTimeTearDown]
-//        public void DeleteTestsExample()
-//        {
-//            UserRepository.DeleteAll();
-//        }
-//    }
-//}
+        [OneTimeTearDown]
+        public void DeleteTestsExample()
+        {
+            UserRepository.DeleteAll();
+        }
+    }
+}

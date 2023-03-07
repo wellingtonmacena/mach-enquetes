@@ -1,12 +1,15 @@
 ﻿using MachEnquetes.Application;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Text;
 
 namespace MachEnquetes.Models
 {
     /// <summary>
     /// A user.
     /// </summary>
+     [Table("User")]
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -50,6 +53,16 @@ namespace MachEnquetes.Models
         public DateTime? LastModifiedDate { get; set; }
         /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
         public DateTime? CreatedDate { get; set; }
+      
+        public User(string fullName, string email, string password, string birthDate) : this()
+        {
+            FullName = fullName;
+            Email = email;
+            Password = password;
+            DateBirth = DateTime.ParseExact(birthDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;            
+        }
 
         public User(string fullName, string email, string password) : this()
         {
@@ -57,8 +70,8 @@ namespace MachEnquetes.Models
             Email = email;
             Password = password;
             DateBirth = DateTime.UtcNow;
-            LastModifiedDate = CreatedDate;
             CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = CreatedDate;
         }
 
         public User()
@@ -68,9 +81,19 @@ namespace MachEnquetes.Models
             LastModifiedDate = CreatedDate;
         }
 
-        public User(string id) : this()
+
+        public override string? ToString()
         {
-           // Id = id;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"{{Id: {Id}, ");
+            sb.AppendLine($"FullName: {FullName}, ");
+            sb.AppendLine($"Email: {Email}, ");
+            sb.AppendLine($"Password: {Password}, ");
+            sb.AppendLine($"DateBirth: {DateBirth}, ");
+            sb.AppendLine($"CreatedDate: {CreatedDate}, ");
+            sb.AppendLine($"LastModifiedDate: {LastModifiedDate}}}");
+
+            return sb.ToString();
         }
     }
 }

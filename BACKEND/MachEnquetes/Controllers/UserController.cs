@@ -1,10 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using MachEnquetes.Entities;
+﻿using MachEnquetes.Entities;
 using MachEnquetes.Repositories;
-using MachEnquetes.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MachEnquetes.Controllers
@@ -13,7 +9,7 @@ namespace MachEnquetes.Controllers
     public class UserController : Controller
     {
         public UserRepository UserRepository { get; set; }
-        private  MachEnquetesContext MachEnquetesContext;
+        private MachEnquetesContext MachEnquetesContext;
         //public UserController(IOptions<DatabaseSettings> options)
         //{
         //    UserRepository = new UserRepository(options);
@@ -21,8 +17,7 @@ namespace MachEnquetes.Controllers
 
         public UserController(MachEnquetesContext machEnquetesContext)
         {
-            this.MachEnquetesContext = machEnquetesContext;
-            UserRepository = new UserRepository(MachEnquetesContext);
+            UserRepository = new UserRepository(machEnquetesContext);
         }
 
         #region UserMethods
@@ -31,8 +26,8 @@ namespace MachEnquetes.Controllers
         [SwaggerOperation(Summary = "Gets all users saved.", Description = "Returns a list with all users saved.")]
         public IActionResult GetAll()
         {
-            //var users = UserRepository.GetAll();
-            return null;
+            var users = UserRepository.GetAll().Result;
+            return users;
         }
 
         //[Route("[controller]/{id}")]

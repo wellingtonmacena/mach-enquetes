@@ -7,7 +7,10 @@ namespace MachEnquetes.Entities;
 
 public partial class MachEnquetesContext : DbContext
 {
-    public DbSet<User> User { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Survey> Surveys { get; set; }
+    public DbSet<Vote> Votes { get; set; }
+    public DbSet<VoteOption> VoteOptions { get; set; }
 
     public MachEnquetesContext(DbContextOptions<MachEnquetesContext> options)
         : base(options)

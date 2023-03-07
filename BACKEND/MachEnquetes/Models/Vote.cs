@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MachEnquetes.Models
 {
+    [Table("Vote")]
     public class Vote
     {
         public int Id
@@ -15,7 +13,7 @@ namespace MachEnquetes.Models
             }
         }
 
-        public int DatetimeOfVote
+        public int FKVoter
         {
             get => default;
             set
@@ -23,7 +21,7 @@ namespace MachEnquetes.Models
             }
         }
 
-        public User Voter
+        public int FKVoteOption
         {
             get => default;
             set
@@ -31,12 +29,17 @@ namespace MachEnquetes.Models
             }
         }
 
-        public Vote VoteOption
+        public int FKSurvey
         {
             get => default;
             set
             {
             }
         }
+
+        /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
+        public DateTime? LastModifiedDate { get; set; }
+        /// <example>"2017-09-08T19:01:55.714942+03:00"</example>
+        public DateTime? CreatedDate { get; set; }
     }
 }

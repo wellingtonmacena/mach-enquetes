@@ -1,7 +1,9 @@
 ﻿using MachEnquetes.Application;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MachEnquetes.Models
 {
+    [Table("Survey")]
     public class Survey
     {
         [SwaggerExclude]
@@ -21,14 +23,7 @@ namespace MachEnquetes.Models
             {
             }
         }
-        /// <example>["red", "blue", "yellow"]</example>
-        public List<VoteOption> VoteOptions
-        {
-            get => default;
-            set
-            {
-            }
-        }
+  
         /// <example>No</example>
         public bool CanUnregistredVote
         {
@@ -38,15 +33,33 @@ namespace MachEnquetes.Models
             }
         }
 
-        public List<Vote> Votes
+        /// <example>No</example>
+        public bool CanUserUpdateVote
         {
             get => default;
             set
             {
             }
         }
+
         /// <example>2</example>
-        public int QuantityOfOptionsCanBeSelected
+        public int OptionsSelectedCount
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public int FKCreatorUser
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public int VotesCount
         {
             get => default;
             set

@@ -1,6 +1,5 @@
 using MachEnquetes.Application;
 using MachEnquetes.Entities;
-using MachEnquetes.Utils;
 using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -20,7 +19,7 @@ builder.Services.AddEntityFrameworkMySQL()
     {
         options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
-        
+
 //builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
 builder.Services.AddSwaggerGen(c => { c.EnableAnnotations(); AddSwaggerDocumentation(c); c.SchemaFilter<SwaggerExcludeFilter>(); });
 
@@ -41,7 +40,8 @@ app.MapControllers();
 
 app.Run();
 
-static void AddSwaggerDocumentation(SwaggerGenOptions o){
+static void AddSwaggerDocumentation(SwaggerGenOptions o)
+{
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 }
