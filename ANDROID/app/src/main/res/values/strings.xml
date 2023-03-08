@@ -11,9 +11,8 @@
 
     ##Signup Layout
     <string name="full_name_signup">Nome Completo</string>
-    <string name="signup_signup">CADASTRO</string>
+    <string name="signup_message_signup">CADASTRO</string>
     <string name="birth_date_signup">Data de Nascimento</string>
-    <string name="cpf_signup">CPF</string>
     <string name="email_signup">Email</string>
     <string name="password_signup">Senha</string>
     <string name="confirmation_password_signup">Confirmar Senha</string>

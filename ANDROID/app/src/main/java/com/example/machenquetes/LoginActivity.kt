@@ -12,4 +12,5 @@ class LoginActivity : AppCompatActivity() {
 
     fun RecoverPassword(view: View) {}
     fun SignIn(view: View) {}
+    fun SignUp(view: View) {}
 }

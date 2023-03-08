@@ -4,6 +4,188 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainOrange"
     tools:context=".SignupActivity">
+
+    <ScrollView
+        android:layout_width="391dp"
+        android:layout_height="788dp"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="-3dp">
+
+        <LinearLayout
+            android:id="@+id/back_cad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/ic_back_cad"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="270dp"
+                android:layout_height="176dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/im_logo"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/txt_cadastro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:text="@string/signup_message_signup"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/txt_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:text="@string/full_name_signup"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/inp_nome"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/im_background_input_white" />
+
+            <TextView
+                android:id="@+id/txt_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:text="@string/birth_date_signup"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/inp_data"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/im_background_input_white"
+                android:inputType="date"
+                android:maxLength="10"
+                android:maxLines="1" />
+
+
+            <TextView
+                android:id="@+id/txt_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:text="@string/email_signup"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/inp_email"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/im_background_input_white"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/txt_senha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/password_signup"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/inp_senha"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/im_background_input_white"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/txt_confSenha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baloo"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/confirmation_password_signup"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/inp_confSenha"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/im_background_input_white"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                app:layout_constraintTop_toBottomOf="@+id/txt_confSenha"
+                tools:layout_editor_absoluteX="51dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp">
+
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_conf"
+                android:layout_width="280dp"
+                android:layout_height="61dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="60dp"
+                android:backgroundTint="@color/white"
+                android:onClick="SendSignUpData"
+                android:src="@drawable/ic_confirmation_button"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

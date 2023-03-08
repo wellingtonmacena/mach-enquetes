@@ -3,11 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/drawable-v24/ic_back_cad.xml" value="0.2095" />
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/drawable-v24/ic_confirmation_button.xml" value="0.2095" />
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/drawable-v24/ic_email.xml" value="0.2095" />
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/drawable-v24/ic_senha.xml" value="0.2095" />
         <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/drawable-v24/im_background_input_white.xml" value="0.2095" />
         <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_initial.xml" value="0.3484375" />
-        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_login.xml" value="0.3178082191780822" />
         <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_main.xml" value="0.3453703703703704" />
-        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_signup.xml" value="0.3484375" />
+        <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_signup.xml" value="0.29403973509933773" />
         <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/ANDROID/app/src/main/res/layout/activity_splash.xml" value="0.3625" />
         <entry key="..\:/Users/wellm/Desktop/Repositorios-Git/mach-enquetes/MachEnquetes/app/src/main/res/layout/activity_main.xml" value="0.1259259259259259" />
       </map>
