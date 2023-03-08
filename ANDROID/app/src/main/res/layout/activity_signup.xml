@@ -5,21 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainOrange"
-    tools:context=".SignupActivity">
+    tools:context=".activities.SignupActivity">
 
     <ScrollView
-        android:layout_width="391dp"
-        android:layout_height="788dp"
+        android:layout_width="403dp"
+        android:layout_height="785dp"
+        android:layout_gravity="center"
         android:orientation="vertical"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="-3dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.666"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:id="@+id/back_cad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:background="@drawable/ic_back_cad"
+            android:background="@drawable/ic_background_signup"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -86,7 +91,6 @@
                 android:inputType="date"
                 android:maxLength="10"
                 android:maxLines="1" />
-
 
             <TextView
                 android:id="@+id/txt_email"
@@ -162,30 +166,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_confSenha"
                 tools:layout_editor_absoluteX="51dp" />
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="40dp">
-
-
-            </LinearLayout>
-
             <ImageButton
                 android:id="@+id/btn_conf"
                 android:layout_width="280dp"
                 android:layout_height="61dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="60dp"
+                android:layout_marginTop="50dp"
                 android:backgroundTint="@color/white"
                 android:onClick="SendSignUpData"
                 android:src="@drawable/ic_confirmation_button"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

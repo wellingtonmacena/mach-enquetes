@@ -6,7 +6,7 @@
     android:background="@color/mainOrange"
     android:theme="@style/Theme.Design.NoActionBar"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context=".activities.SplashActivity">
 
     <ImageView
         android:layout_width="280dp"
